@@ -8,7 +8,7 @@
     "build:scss": "npm-run-all build:scss:*",
     "build:scss:compile": "sass ../node_modules/govuk-frontend/govuk/all.scss --style compressed | postcss --use autoprefixer --output ./output/all.css",
     "build:scss:compileIe": "sass ../node_modules/govuk-frontend/govuk/all-ie8.scss --style compressed | postcss --use autoprefixer oldie --output ./output/all-ie8.css",
-    "build:assets:copy": "mkdir ./output/assets/ && cp ../node_modules/govuk-frontend/govuk/assets/**/* ./output/assets/",
+    "build:assets:copy": "mkdir -p ./output/assets/ && cp -r ../node_modules/govuk-frontend/govuk/assets/* ./output/assets/",
     "build": "npm-run-all --parallel build:*"
   },
   "author": "",
