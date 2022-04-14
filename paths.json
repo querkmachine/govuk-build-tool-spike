@@ -1,0 +1,4 @@
+{
+  "src": "../node_modules/govuk-frontend/govuk/",
+  "components": "../node_modules/govuk-frontend/govuk/components/"
+}
