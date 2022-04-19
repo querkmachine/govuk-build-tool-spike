@@ -13,26 +13,50 @@ Each build tool should achieve all four tasks when `npm run build` is ran in its
 
 > Note that Sass compilation is tested using Dart Sass, instead of Node Sass as GOV.UK Frontend currently uses.
 
-## Build tools tested
+## Build tools considered
 
-- [x] Gulp
-- [ ] Parcel
-- [x] (Vanilla JS) Node scripts
-- [x] (Vanilla JS) npm scripts
-- [ ] Webpack
+- [Gulp](https://gulpjs.com/) 4
+- (Vanilla JS) [Node scripts](https://nodejs.org/en/)
+- (Vanilla JS) [npm scripts](https://docs.npmjs.com/cli/v6/using-npm/scripts)
+- [Webpack](https://webpack.js.org/) 5
 
-This list is incomplete, as other tools may still be considered.
+### Still need investigation
+
+- [Snowpack](https://www.snowpack.dev/) 3
+- [Vite](https://vitejs.dev/) 2 
+- [wmr](https://wmr.dev/) 3
+
+### Tools not in consideration
+
+These tools were looked into, but a spike into how they work was either not attempted or was abandoned early in the attempt. 
+
+- [esbuild](https://esbuild.github.io) 0 — Too immature. Would prefer something with more stability. 
+- [Parcel](https://parceljs.org) 2 — Parcel does not seem compatible with Frontend's existing CSS/JS architecture. 
+
+These lists are incomplete, as other tools may still be considered.
 
 ## Comparisons
 
-| |Gulp|Parcel|Node scripts|npm scripts|Webpack|
-|Avg. build time||||||
-|No. of dependencies needed to complete tasks||||||
-|Ease of customisation||||||
-|Ecosystem activity||||||
-|Other notes||||||
+|                     |Gulp |Node |npm |Webpack |
+|:--------------------|:----|:----|:---|:-------|
+|Could complete tasks |✔    |✔    |✔   |✘ (2/4) |
+|Avg. build time      |-|-|-|-|
+|№ of dependencies    |484  |170  |341 |320     |
+|MBs of deps. used    |70.0 |71.1 |82.1|79.8    |
+|Usage                |1,259,955|-|-|20,995,333|
+|Last release         |2019-05-06|-|-|2022-04-07|
+
+- Average build time is a mean aveage of three runs (lower is better). 
+- Number of dependencies needed measured by number of entries in `package-lock.json` file (lower is better). 
+- MBs of dependencies measured by total size of `node_modules` folder (lower is better).
+- Usage measured by number of downloads in last week (higher is better).
 
 ## Kim's opinions
+
+### esbuild
+
+- Immature. Support for plugins (including Sass compilation) is still experimental.
+- Documentation feels like it could be better.
 
 ### Gulp
 
@@ -40,6 +64,11 @@ This list is incomplete, as other tools may still be considered.
 - Frequently requires additional dependencies to make tools work within Gulp. Occasional need to jury-rig something into it leads to messy code.
 
 ### Parcel
+
+- Oriented towards webapps with dynamic tree-shaking, bundling, etc. Not sure if/how the given tasks could be completed without modifying source files or defining new entry files. 
+- Seemingly only works with a HTML or JS entry file (as is more common with SPAs).
+- Requires "transformer" dependencies for everything not HTML/CSS/JS. 
+- "Zero configuration" approach seems pretty much incompatible with how we operate.
 
 ### Node scripts
 
@@ -54,6 +83,10 @@ This list is incomplete, as other tools may still be considered.
 - Seemingly little to no advantages over using Node scripts, unless doing something very simple. 
 - Having scripts bundled in package.json file is harder to read/manage than separate files. 
 - Dependent upon each platforms command lines, which are all different, may have been customised by user, etc. No guarantee they'll work consistently without extra work or dependencies to bridge the gaps. 
+
+### Vite
+
+- Very similar to Parcel in style. 
 
 ### Webpack
 
