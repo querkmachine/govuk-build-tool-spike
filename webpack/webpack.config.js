@@ -1,6 +1,7 @@
 const paths = require("../paths.json")
 const path = require("path")
-const copyPlugin = require("copy-webpack-plugin")
+const CopyPlugin = require("copy-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
   entry: [paths.src + "all.js", paths.src + "all.scss"],
@@ -8,30 +9,57 @@ module.exports = {
     filename: "all.js",
     path: path.resolve(__dirname, "output"),
   },
-  plugins: [
-    new copyPlugin({
-      patterns: [
-        { from: paths.src + "assets/*", to: "./output" }
-      ],
-    }),
-  ],
   module: {
     rules: [
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.scss$/i,
         use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader",
-          "postcss-loader"
-        ],
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: "/output/"
+            }
+          }, 
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              url: false
+            }
+          },
+          'postcss-loader',
+          { 
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                includePaths: ["./output/assets/"],
+              },
+            },
+          }
+        ]
       },
+      {
+        test: /\.css$/i,
+        loader: 'css-loader'
+      },
+      {
+        test: /\.(eot|woff|woff2|ttf|svg|png|jpg|jpeg|gif)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 30000,
+          name: "[name]-[hash].[ext]"
+        }
+      }
     ],
   },
-  loaders: [
-    {
-      test: /\.(eot|woff|woff2|ttf|svg|png|jpg|jpeg|gif)$/,
-      loader: 'url-loader?limit=30000&name=[name]-[hash].[ext]'
-    }
-  ]
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: "all.css"
+    }),
+    new CopyPlugin({
+      patterns: [
+        { from: paths.src + "assets/", to: "./assets/" }
+      ],
+    }),
+  ],
 }
